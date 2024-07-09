@@ -17,3 +17,20 @@ end
 
 require "lazy_setup"
 require "polish"
+
+local nvim_lsp = require('lspconfig')
+
+nvim_lsp.intelephense.setup {
+    on_attach = function(client, bufnr)
+        client.server_capabilities.documentFormattingProvider = false
+        client.server_capabilities.documentRangeFormattingProvider = false
+    end,
+    settings = {
+        intelephense = {
+            format = {
+                enable = false
+            }
+        }
+    }
+}
+
