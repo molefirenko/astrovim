@@ -25,3 +25,23 @@ end
 
 require "lazy_setup"
 require "polish"
+
+local dap = require("dap")
+dap.adapters.php = {
+  type = "executable",
+  command = "node",
+  args = { os.getenv("HOME") .. "/Projects/vscode-php-debug/out/phpDebug.js" }
+}
+dap.configurations.php = {
+  {
+    type = "php",
+    request = "launch",
+    name = "Listen for XDebug",
+    port = 9003,
+    log = true,
+    pathMappings = {
+      ["/var/www/html/"] = vim.fn.getcwd() .. "/", -- Adjust paths if needed
+    },
+  }
+}
+

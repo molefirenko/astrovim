@@ -18,6 +18,7 @@ return {
 
         -- install debuggers
         -- "debugpy",
+        "php-debug-adapter",
 
         -- install any other package
         -- "tree-sitter-cli",
