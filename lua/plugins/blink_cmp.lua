@@ -3,7 +3,7 @@ return{
     'saghen/blink.cmp',
     dependencies = {
       {
-        'Exafunction/codeium.nvim',
+        'Exafunction/windsurf.nvim',
       },
     },
     opts = {
