@@ -29,6 +29,7 @@ return {
       disabled = { -- disable formatting capabilities for the listed language servers
         -- disable lua_ls formatting capability if you want to use StyLua to format your lua code
         -- "lua_ls",
+        "intelephense",
       },
       timeout_ms = 1000, -- default format timeout
       -- filter = function(client) -- fully override the default formatting function
@@ -69,9 +70,6 @@ return {
           event = { "InsertLeave", "BufEnter" },
           -- the rest of the autocmd options (:h nvim_create_autocmd)
           desc = "Refresh codelens (buffer)",
-          callback = function(args)
-            if require("astrolsp").config.features.codelens then vim.lsp.codelens.refresh { bufnr = args.buf } end
-          end,
         },
       },
     },
