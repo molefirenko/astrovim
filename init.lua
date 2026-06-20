@@ -44,4 +44,3 @@ dap.configurations.php = {
     },
   }
 }
-
