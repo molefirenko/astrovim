@@ -15,8 +15,8 @@ The load order is: `init.lua` → `lua/lazy_setup.lua` → `lua/community.lua` �
 - **`lua/community.lua`** — disabled by default (guard line at top); enable to import AstroCommunity packs.
 - **`lua/plugins/`** — user overrides, one concern per file:
   - `astrocore.lua` — vim options, buffer keymaps, diagnostics config.
-  - `astrolsp.lua` — LSP feature flags, formatting (intelephense formatting is disabled), codelens autocommands.
-  - `mason.lua` — auto-installed Mason packages: `lua-language-server`, `intelephense`, `stylua`, `php-debug-adapter`, `phpcs`, `phpcbf`.
+  - `astrolsp.lua` — LSP feature flags, formatting (intelephense formatting is disabled), codelens autocommands. Format-on-save is enabled but scoped to PHP only (`format_on_save.enabled = true` with `allow_filetypes = { "php" }`).
+  - `mason.lua` — auto-installed Mason packages: `lua-language-server`, `intelephense`, `stylua`, `php-debug-adapter`, `phpcs`, `phpcbf`. `phpcs`/`phpcbf` are auto-wired as null-ls sources by AstroNvim core's mason-null-ls integration, so `none-ls.lua` intentionally stays disabled — no manual source registration is needed there.
   - `treesitter.lua` — parsers auto-install enabled; ensures lua, vim, php, html, css.
   - `codeium.lua` — Windsurf (Codeium) AI completion via `Exafunction/windsurf.nvim`.
   - `blink_cmp.lua` — configures blink.cmp to surface Codeium as a completion source.

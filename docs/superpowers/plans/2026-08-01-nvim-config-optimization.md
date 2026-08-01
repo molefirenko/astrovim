@@ -40,7 +40,7 @@ Each task below is independent and safe to land on its own.
 
 **Interfaces:** None — this is a pure deletion, no other task depends on it.
 
-- [ ] **Step 1: Remove the dependency**
+- [x] **Step 1: Remove the dependency**
 
 Edit `lua/plugins/codeium.lua` from:
 
@@ -74,17 +74,17 @@ return {
 
 (This also folds in Task 3's lazy-load trigger since it's the same line being touched — see Task 3 for why `event = "InsertEnter"` is safe here.)
 
-- [ ] **Step 2: Verify nvim-cmp is no longer pulled in**
+- [x] **Step 2: Verify nvim-cmp is no longer pulled in**
 
 Run: `nvim --headless "+Lazy! sync" +qa`
 Then: `grep '"nvim-cmp"' lazy-lock.json`
 Expected: no output (entry removed from the lockfile after sync).
 
-- [ ] **Step 3: Manually confirm completion still works**
+- [x] **Step 3: Manually confirm completion still works**
 
 Open any file in `nvim`, enter insert mode, and confirm Codeium suggestions and blink.cmp's completion menu both still appear as before.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add lua/plugins/codeium.lua lazy-lock.json
@@ -102,7 +102,7 @@ git commit -m "Remove unused nvim-cmp dependency and lazy-load windsurf.nvim"
 - Consumes: `phpcs` and `phpcbf` binaries, already installed by `mason-tool-installer` per `lua/plugins/mason.lua:25-26`.
 - Produces: none-ls sources registered under the `nvimtools/none-ls.nvim` plugin spec — no other task depends on this.
 
-- [ ] **Step 1: Enable the file and register sources**
+- [x] **Step 1: Enable the file and register sources**
 
 Replace the full contents of `lua/plugins/none-ls.lua` with:
 
@@ -124,7 +124,7 @@ return {
 }
 ```
 
-- [ ] **Step 2: Enable format-on-save for PHP only**
+- [x] **Step 2: Enable format-on-save for PHP only**
 
 In `lua/plugins/astrolsp.lua`, scope format-on-save to PHP so the rest of the config's behavior (global format-on-save stays off) doesn't change:
 
@@ -136,21 +136,25 @@ In `lua/plugins/astrolsp.lua`, scope format-on-save to PHP so the rest of the co
         },
 ```
 
-- [ ] **Step 3: Verify the sources attach**
+- [x] **Step 3: Verify the sources attach**
 
 Run: `nvim --headless "+Lazy! sync" +qa` to ensure `phpcs`/`phpcbf` resolve without error (no "unknown builtin" message).
 Open any `.php` file in the repo (or a scratch one) and run `:NullLsInfo` — expected: `phpcs` listed under diagnostics, `phpcbf` listed under formatting, both marked as attached/available.
 
-- [ ] **Step 4: Confirm formatting behavior manually**
+- [x] **Step 4: Confirm formatting behavior manually**
 
 In a `.php` buffer, deliberately misformat a line (e.g. wrong indent), save (`:w`), and confirm `phpcbf` reformats it. Introduce a phpcs violation (e.g. an unused variable, or whatever your local `phpcs` ruleset flags) and confirm a diagnostic appears.
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lua/plugins/none-ls.lua lua/plugins/astrolsp.lua
 git commit -m "Wire up phpcs/phpcbf via none-ls for PHP diagnostics and format-on-save"
 ```
+
+#### Post-implementation note
+
+The approach above (manually registering `phpcs`/`phpcbf` sources in `none-ls.lua`) turned out to be unnecessary and was reverted. AstroNvim core's `mason-null-ls` integration auto-registers null-ls sources for any Mason-installed tool it recognizes, including `phpcs`/`phpcbf` — no manual `opts.sources` wiring is needed, and `none-ls.lua` correctly stays disabled (guard line intact). The actual root cause of "PHP formatting/linting not applying" was that `astrolsp.lua`'s `format_on_save.enabled` was `false`: AstroLSP's own logic (`astrolsp/init.lua:96-98`) short-circuits on `enabled = false` and never consults `allow_filetypes` at all. The real fix was setting `format_on_save.enabled = true` paired with `allow_filetypes = { "php" }`, which scopes format-on-save to PHP only rather than enabling it globally.
 
 ---
 
@@ -161,7 +165,7 @@ git commit -m "Wire up phpcs/phpcbf via none-ls for PHP diagnostics and format-o
 
 **Interfaces:** None — isolated change to the `dap.adapters.php` table.
 
-- [ ] **Step 1: Replace `os.getenv("HOME")` with `vim.fn.stdpath("data")`**
+- [x] **Step 1: Replace `os.getenv("HOME")` with `vim.fn.stdpath("data")`**
 
 Edit `lua/plugins/dap.lua`:
 
@@ -192,16 +196,16 @@ return {
 }
 ```
 
-- [ ] **Step 2: Verify the resolved path is identical to before**
+- [x] **Step 2: Verify the resolved path is identical to before**
 
 Run: `nvim --headless -c 'lua print(vim.fn.stdpath("data") .. "/mason/packages/php-debug-adapter/extension/out/phpDebug.js")' -c 'q' 2>&1`
 Expected: prints the same path as `echo "$HOME/.local/share/nvim/mason/packages/php-debug-adapter/extension/out/phpDebug.js"` on this machine (unless `XDG_DATA_HOME` is set, in which case the new path is the correct one).
 
-- [ ] **Step 3: Manually confirm a debug session still connects**
+- [x] **Step 3: Manually confirm a debug session still connects**
 
 This needs a real PHP + XDebug environment, not something scriptable here: start a debug session with `:h dap` (`require("dap").continue()` / your usual keymap), confirm nvim-dap still launches the adapter and a breakpoint hit is reported over port 9003.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
 ```bash
 git add lua/plugins/dap.lua
@@ -219,7 +223,7 @@ git commit -m "Use stdpath(data) instead of \$HOME for php-debug-adapter path"
 
 **Interfaces:** None — cosmetic/cleanup only.
 
-- [ ] **Step 1: Delete the unused `fooscript` filetype example**
+- [x] **Step 1: Delete the unused `fooscript` filetype example**
 
 In `lua/plugins/astrocore.lua`, remove:
 
@@ -241,21 +245,21 @@ In `lua/plugins/astrocore.lua`, remove:
 
 so the opts table goes straight from the `diagnostics` block to the `options` block.
 
-- [ ] **Step 2: Run StyLua across the whole config**
+- [x] **Step 2: Run StyLua across the whole config**
 
 Run: `~/.local/share/nvim/mason/bin/stylua lua/ init.lua`
 Expected: reformats `lua/plugins/blink_cmp.lua` (single→double quotes, `return {` spacing) and any other non-conforming file; no other files should change since they already conform.
 
-- [ ] **Step 3: Verify with a check-only pass**
+- [x] **Step 3: Verify with a check-only pass**
 
 Run: `~/.local/share/nvim/mason/bin/stylua --check lua/ init.lua`
 Expected: exits 0 with no diff output.
 
-- [ ] **Step 4: Sanity-load the config**
+- [x] **Step 4: Sanity-load the config**
 
 Run: `nvim --headless "+Lazy! sync" +qa` and confirm no Lua errors are printed (a botched removal in `astrocore.lua` would show up here as a syntax error on startup).
 
-- [ ] **Step 5: Commit**
+- [x] **Step 5: Commit**
 
 ```bash
 git add lua/plugins/astrocore.lua lua/plugins/blink_cmp.lua
