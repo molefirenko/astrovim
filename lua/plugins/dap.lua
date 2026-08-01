@@ -1,7 +1,7 @@
 return {
   "mfussenegger/nvim-dap",
-  config = function(plugin, opts)
-    require "astronvim.plugins.configs.nvim-dap"(plugin, opts)
+  config = function()
+    require "astronvim.plugins.configs.nvim-dap"
     local dap = require "dap"
     dap.adapters.php = {
       type = "executable",
