@@ -17,7 +17,7 @@ return {
         "vim",
         "php",
         "html",
-        "css"
+        "css",
         -- add more arguments for adding more treesitter parsers
       },
     },

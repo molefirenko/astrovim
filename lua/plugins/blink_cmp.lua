@@ -1,18 +1,18 @@
-return{
+return {
   {
-    'saghen/blink.cmp',
+    "saghen/blink.cmp",
     dependencies = {
       {
-        'Exafunction/windsurf.nvim',
+        "Exafunction/windsurf.nvim",
       },
     },
     opts = {
       sources = {
-        default = { 'codeium' },
+        default = { "codeium" },
         providers = {
-          codeium = { name = 'Codeium', module = 'codeium.blink', async = true },
+          codeium = { name = "Codeium", module = "codeium.blink", async = true },
         },
       },
     },
-  }
+  },
 }
