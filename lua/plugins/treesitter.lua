@@ -18,6 +18,8 @@ return {
         "php",
         "html",
         "css",
+        "markdown",
+        "markdown_inline",
         -- add more arguments for adding more treesitter parsers
       },
     },
