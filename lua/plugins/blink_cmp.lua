@@ -7,6 +7,7 @@ return {
       },
     },
     opts = {
+      signature = { enabled = true },
       sources = {
         default = { "codeium" },
         providers = {
