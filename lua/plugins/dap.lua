@@ -14,9 +14,9 @@ return {
         request = "launch",
         name = "Listen for XDebug",
         port = 9003,
-        log = true,
+        -- resolved by nvim-dap when each session starts, so it follows `:cd` changes
         pathMappings = {
-          ["/var/www/html/"] = vim.fn.getcwd() .. "/",
+          ["/var/www/html/"] = "${workspaceFolder}/",
         },
       },
     }

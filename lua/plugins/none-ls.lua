@@ -1,22 +1,19 @@
 -- Customize None-ls sources
+--
+-- Sources for Mason-installed tools (phpcs, phpcbf, prettier) are registered automatically by
+-- mason-null-ls (wired in AstroNvim core). Only overrides of those defaults belong here.
 
 ---@type LazySpec
 return {
-  "nvimtools/none-ls.nvim",
-  opts = function(_, opts)
-    -- opts variable is the default configuration table for the setup function call
-    local null_ls = require "null-ls"
-
-    -- Check supported formatters and linters
-    -- https://github.com/nvimtools/none-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-    -- https://github.com/nvimtools/none-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-
-    -- Only insert new sources, do not replace the existing ones
-    -- (If you wish to replace, use `opts.sources = {}` instead of the `list_insert_unique` function)
-    opts.sources = require("astrocore").list_insert_unique(opts.sources, {
-      -- Markdown formatting (tables, headers, spacing), triggered on-demand via <Leader>mf
-      -- (not on save — markdown is intentionally excluded from format_on_save.allow_filetypes)
-      null_ls.builtins.formatting.prettier.with { filetypes = { "markdown" } },
-    })
-  end,
+  "jay-babu/mason-null-ls.nvim",
+  opts = {
+    handlers = {
+      -- phpcs defaults to linting on every text change, spawning a process per typing pause.
+      -- Run it on save instead to keep editing responsive on large rulesets.
+      phpcs = function()
+        local null_ls = require "null-ls"
+        null_ls.register(null_ls.builtins.diagnostics.phpcs.with { method = null_ls.methods.DIAGNOSTICS_ON_SAVE })
+      end,
+    },
+  },
 }
